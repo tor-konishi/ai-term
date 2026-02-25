@@ -9,11 +9,22 @@ require('dotenv').config();
 let mainWindow;
 const sessions = new Map();
 let sessionIdCounter = 0;
+
 // 設定ファイルをexeと同じフォルダに保存
-const configPath = app.isPackaged 
-  ? path.join(path.dirname(app.getPath('exe')), 'config.json')
-  : path.join(app.getPath('userData'), 'config.json');
+function getConfigPath() {
+  if (app.isPackaged) {
+    // パッケージ版: exeと同じフォルダ
+    return path.join(path.dirname(process.execPath), 'config.json');
+  } else {
+    // 開発環境: AppData
+    return path.join(app.getPath('userData'), 'config.json');
+  }
+}
+
+const configPath = getConfigPath();
 const skillsPath = path.join(__dirname, 'skills');
+
+console.log('設定ファイルパス:', configPath);
 
 function loadSkillFiles() {
   const skills = {};
@@ -63,7 +74,18 @@ function loadConfig() {
 
 function saveConfig(config) {
   try {
+    console.log('設定保存試行:', configPath);
+    console.log('保存する設定:', JSON.stringify(config, null, 2));
+    
+    // ディレクトリが存在しない場合は作成
+    const configDir = path.dirname(configPath);
+    if (!fs.existsSync(configDir)) {
+      fs.mkdirSync(configDir, { recursive: true });
+      console.log('ディレクトリ作成:', configDir);
+    }
+    
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+    console.log('設定保存成功');
     return true;
   } catch (error) {
     console.error('設定保存エラー:', error);
