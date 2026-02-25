@@ -91,58 +91,28 @@ function loadConfig() {
 }
 
 function saveConfig(config) {
-  const logFile = path.join(path.dirname(configPath), 'debug.log');
-  const log = (msg) => {
-    const timestamp = new Date().toISOString();
-    const logMsg = `[${timestamp}] ${msg}\n`;
-    console.log(msg);
-    try {
-      fs.appendFileSync(logFile, logMsg, 'utf8');
-    } catch (e) {}
-  };
-  
   try {
-    log('=== 設定保存開始 ===');
-    log('app.isPackaged: ' + app.isPackaged);
-    log('process.execPath: ' + process.execPath);
-    log('設定保存先: ' + configPath);
-    log('保存する設定: ' + JSON.stringify(config, null, 2));
-    
     const configDir = path.dirname(configPath);
-    log('設定ディレクトリ: ' + configDir);
     
     if (!fs.existsSync(configDir)) {
-      log('ディレクトリが存在しないため作成します');
       fs.mkdirSync(configDir, { recursive: true });
-      log('ディレクトリ作成成功: ' + configDir);
-    } else {
-      log('ディレクトリは既に存在します');
     }
     
     let existingConfig = {};
     if (fs.existsSync(configPath)) {
-      log('既存の設定ファイルを読み込みます');
       try {
         existingConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-        log('既存設定: ' + JSON.stringify(existingConfig, null, 2));
       } catch (e) {
-        log('既存設定の読み込み失敗: ' + e.message);
+        console.log('既存設定の読み込み失敗、新規作成します');
       }
-    } else {
-      log('既存の設定ファイルはありません');
     }
     
     const mergedConfig = { ...existingConfig, ...config };
-    log('マージ後の設定: ' + JSON.stringify(mergedConfig, null, 2));
-    
     fs.writeFileSync(configPath, JSON.stringify(mergedConfig, null, 2), 'utf8');
-    log('設定保存成功!');
-    log('=== 設定保存完了 ===');
+    console.log('設定保存成功:', configPath);
     return true;
   } catch (error) {
-    log('=== 設定保存エラー ===');
-    log('エラー詳細: ' + error.message);
-    log('エラースタック: ' + error.stack);
+    console.error('設定保存エラー:', error);
     return false;
   }
 }
