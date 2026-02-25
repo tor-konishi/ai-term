@@ -22,12 +22,23 @@ ElectronベースのAI搭載ターミナルアプリケーション。ネット�
 
 ## セットアップ
 
-### 必要要件
+### エンドユーザー向け（ダウンロードして使う）
+
+**推奨**: [Releases](https://github.com/yourusername/ai-terminal/releases)から最新の`AI-Terminal-Portable.zip`をダウンロード
+
+1. ZIPを展開
+2. `.env.example`を`.env`にリネーム
+3. `.env`を開いてAPIキーを設定
+4. `AI Terminal.exe`を起動
+
+### 開発者向け（ソースから実行）
+
+#### 必要要件
 
 - Node.js 16以上
 - Windows 10/11（macOS/Linuxは未テスト）
 
-### インストール
+#### インストール
 
 ```bash
 git clone https://github.com/yourusername/ai-terminal.git
@@ -51,14 +62,37 @@ GEMINI_API_KEY=your_actual_key_here
 npm start
 ```
 
-## Windows実行ファイル作成
+## Windows実行ファイル作成（開発者向け）
+
+### インストーラー版とポータブル版
 
 ```bash
 npm run build:win
 ```
 
 - `dist/AI Terminal Setup.exe` - インストーラー
-- `dist/AI Terminal.exe` - ポータブル版
+- `dist/AI Terminal.exe` - ポータブル版（単体）
+
+### ポータブル版ZIP（推奨）
+
+実行に必要なファイルをすべて含んだZIPを作成：
+
+```bash
+npm run build:portable
+```
+
+- `dist/AI-Terminal-Portable.zip` - 実行ファイル + .env.example + README + skills
+
+ZIPを展開して、`.env.example`を`.env`にリネームしてAPIキーを設定するだけで使用できます。
+
+### GitHub Releasesで公開
+
+タグを作成してpushすると、自動でビルド・リリースされます：
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ## 使い方
 
