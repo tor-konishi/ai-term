@@ -26,6 +26,7 @@
   "build": {
     "appId": "com.aiterminal.app",
     "productName": "AI Terminal",
+    "publish": null,
     "win": {
       "target": [
         "nsis",
