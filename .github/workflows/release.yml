@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -20,23 +23,22 @@ jobs:
     - name: Install dependencies
       run: npm install
     
-    - name: Build portable version
-      run: npm run build:portable
+    - name: Build all versions
+      run: npm run build:win
+    
+    - name: Build portable ZIP
+      run: node scripts/create-portable-zip.js
     
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           dist/AI-Terminal-Portable.zip
-          dist/AI Terminal Setup.exe
         body: |
           ## ダウンロード
           
           ### 推奨: ポータブル版
           - **AI-Terminal-Portable.zip** - すぐに使えるポータブル版（.env.example、skills含む）
-          
-          ### インストーラー版
-          - **AI Terminal Setup.exe** - Windowsインストーラー
           
           ## セットアップ手順（ポータブル版）
           
