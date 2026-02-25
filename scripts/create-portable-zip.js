@@ -3,14 +3,17 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const distDir = path.join(__dirname, '..', 'dist');
-const portableExe = path.join(distDir, 'AI Terminal.exe');
 const zipName = 'AI-Terminal-Portable.zip';
 const zipPath = path.join(distDir, zipName);
 
-if (!fs.existsSync(portableExe)) {
+// ポータブル版exeを検索（バージョン付きファイル名に対応）
+const exeFiles = fs.readdirSync(distDir).filter(f => f.endsWith('.exe') && f.startsWith('AI Terminal'));
+if (exeFiles.length === 0) {
   console.error('ポータブル版exeが見つかりません');
   process.exit(1);
 }
+const portableExe = path.join(distDir, exeFiles[0]);
+console.log(`ポータブル版exeを検出: ${exeFiles[0]}`);
 
 const tempDir = path.join(distDir, 'portable-temp');
 if (fs.existsSync(tempDir)) {
