@@ -85,15 +85,6 @@ npm run build:portable
 
 ZIPを展開して、`.env.example`を`.env`にリネームしてAPIキーを設定するだけで使用できます。
 
-### GitHub Releasesで公開
-
-タグを作成してpushすると、自動でビルド・リリースされます：
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
 ## 使い方
 
 ### 接続方法
