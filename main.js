@@ -14,9 +14,15 @@ let sessionIdCounter = 0;
 function getConfigPath() {
   if (app.isPackaged) {
     // パッケージ版: exeと同じフォルダ
-    return path.join(path.dirname(process.execPath), 'config.json');
+    const exePath = process.execPath;
+    const exeDir = path.dirname(exePath);
+    console.log('パッケージ版検出');
+    console.log('exePath:', exePath);
+    console.log('exeDir:', exeDir);
+    return path.join(exeDir, 'config.json');
   } else {
     // 開発環境: AppData
+    console.log('開発環境検出');
     return path.join(app.getPath('userData'), 'config.json');
   }
 }
@@ -85,34 +91,58 @@ function loadConfig() {
 }
 
 function saveConfig(config) {
+  const logFile = path.join(path.dirname(configPath), 'debug.log');
+  const log = (msg) => {
+    const timestamp = new Date().toISOString();
+    const logMsg = `[${timestamp}] ${msg}\n`;
+    console.log(msg);
+    try {
+      fs.appendFileSync(logFile, logMsg, 'utf8');
+    } catch (e) {}
+  };
+  
   try {
-    console.log('設定保存試行:', configPath);
-    console.log('保存する設定:', JSON.stringify(config, null, 2));
+    log('=== 設定保存開始 ===');
+    log('app.isPackaged: ' + app.isPackaged);
+    log('process.execPath: ' + process.execPath);
+    log('設定保存先: ' + configPath);
+    log('保存する設定: ' + JSON.stringify(config, null, 2));
     
-    // ディレクトリが存在しない場合は作成
     const configDir = path.dirname(configPath);
+    log('設定ディレクトリ: ' + configDir);
+    
     if (!fs.existsSync(configDir)) {
+      log('ディレクトリが存在しないため作成します');
       fs.mkdirSync(configDir, { recursive: true });
-      console.log('ディレクトリ作成:', configDir);
+      log('ディレクトリ作成成功: ' + configDir);
+    } else {
+      log('ディレクトリは既に存在します');
     }
     
-    // 既存の設定を読み込んでマージ
     let existingConfig = {};
     if (fs.existsSync(configPath)) {
+      log('既存の設定ファイルを読み込みます');
       try {
         existingConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        log('既存設定: ' + JSON.stringify(existingConfig, null, 2));
       } catch (e) {
-        console.log('既存設定の読み込み失敗、新規作成します');
+        log('既存設定の読み込み失敗: ' + e.message);
       }
+    } else {
+      log('既存の設定ファイルはありません');
     }
     
-    // マージして保存
     const mergedConfig = { ...existingConfig, ...config };
+    log('マージ後の設定: ' + JSON.stringify(mergedConfig, null, 2));
+    
     fs.writeFileSync(configPath, JSON.stringify(mergedConfig, null, 2), 'utf8');
-    console.log('設定保存成功');
+    log('設定保存成功!');
+    log('=== 設定保存完了 ===');
     return true;
   } catch (error) {
-    console.error('設定保存エラー:', error);
+    log('=== 設定保存エラー ===');
+    log('エラー詳細: ' + error.message);
+    log('エラースタック: ' + error.stack);
     return false;
   }
 }
@@ -131,6 +161,11 @@ app.whenReady().then(() => {
   });
 
   mainWindow.loadFile('index.html');
+  
+  // 開発環境のみ開発者ツールを開く
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
 });
 
 ipcMain.on('window-minimize', () => {
