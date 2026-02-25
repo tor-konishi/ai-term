@@ -135,14 +135,12 @@ ZIPを展開して、`.env.example`を`.env`にリネームしてAPIキーを設
 
 ### 設定ファイルの保存場所
 
-APIキーや設定は**アプリのインストール場所とは別**の以下の場所に保存されます：
+APIキーや設定は**実行ファイルと同じフォルダ**に保存されます：
 
-- **Windows**: `C:\Users\<ユーザー名>\AppData\Roaming\ai-terminal\config.json`
-- **macOS**: `~/Library/Application Support/ai-terminal/config.json`
-- **Linux**: `~/.config/ai-terminal/config.json`
+- **ポータブル版**: `AI Terminal.exe`と同じフォルダの`config.json`
+- **開発環境**: `%APPDATA%\ai-terminal\config.json`
 
-※ APIキーは平文で保存されます。ファイルの取り扱いにご注意ください。  
-※ アプリをアンインストールしても、この設定ファイルは削除されません。
+※ APIキーは平文で保存されます。ファイルの取り扱いにご注意ください。
 
 ## 既知の問題
 

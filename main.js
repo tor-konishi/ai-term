@@ -9,7 +9,10 @@ require('dotenv').config();
 let mainWindow;
 const sessions = new Map();
 let sessionIdCounter = 0;
-const configPath = path.join(app.getPath('userData'), 'config.json');
+// 設定ファイルをexeと同じフォルダに保存
+const configPath = app.isPackaged 
+  ? path.join(path.dirname(app.getPath('exe')), 'config.json')
+  : path.join(app.getPath('userData'), 'config.json');
 const skillsPath = path.join(__dirname, 'skills');
 
 function loadSkillFiles() {
