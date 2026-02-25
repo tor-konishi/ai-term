@@ -1,0 +1,7 @@
+{
+  "aiModel": "gemini",
+  "aiVersion": "gemini-2.0-flash-exp",
+  "apiKey": "",
+  "terminalFontSize": 14,
+  "chatFontSize": 13
+}

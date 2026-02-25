@@ -59,17 +59,29 @@ function loadConfig() {
   try {
     if (fs.existsSync(configPath)) {
       return JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    } else {
+      // 設定ファイルがない場合、デフォルトを作成
+      console.log('設定ファイルが見つからないため、デフォルトを作成します');
+      const defaultConfig = {
+        aiModel: 'gemini',
+        aiVersion: 'gemini-2.0-flash-exp',
+        apiKey: '',
+        terminalFontSize: 14,
+        chatFontSize: 13
+      };
+      saveConfig(defaultConfig);
+      return defaultConfig;
     }
   } catch (error) {
     console.error('設定読み込みエラー:', error);
+    return {
+      aiModel: 'gemini',
+      aiVersion: 'gemini-2.0-flash-exp',
+      apiKey: '',
+      terminalFontSize: 14,
+      chatFontSize: 13
+    };
   }
-  return {
-    aiModel: 'gemini',
-    aiVersion: 'gemini-2.0-flash-exp',
-    apiKey: process.env.GEMINI_API_KEY || '',
-    terminalFontSize: 14,
-    chatFontSize: 13
-  };
 }
 
 function saveConfig(config) {
@@ -84,7 +96,19 @@ function saveConfig(config) {
       console.log('ディレクトリ作成:', configDir);
     }
     
-    fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+    // 既存の設定を読み込んでマージ
+    let existingConfig = {};
+    if (fs.existsSync(configPath)) {
+      try {
+        existingConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      } catch (e) {
+        console.log('既存設定の読み込み失敗、新規作成します');
+      }
+    }
+    
+    // マージして保存
+    const mergedConfig = { ...existingConfig, ...config };
+    fs.writeFileSync(configPath, JSON.stringify(mergedConfig, null, 2), 'utf8');
     console.log('設定保存成功');
     return true;
   } catch (error) {

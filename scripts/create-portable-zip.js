@@ -25,6 +25,13 @@ console.log('ポータブル版ZIPを作成中...');
 
 fs.copyFileSync(portableExe, path.join(tempDir, 'AI Terminal.exe'));
 
+// デフォルト設定ファイルをコピー
+const defaultConfig = path.join(__dirname, '..', 'config.default.json');
+if (fs.existsSync(defaultConfig)) {
+  fs.copyFileSync(defaultConfig, path.join(tempDir, 'config.json'));
+  console.log('デフォルト設定ファイルをコピーしました');
+}
+
 const readme = `AI Terminal - ポータブル版
 ========================================
 
