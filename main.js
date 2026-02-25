@@ -13,12 +13,10 @@ let sessionIdCounter = 0;
 // 設定ファイルをexeと同じフォルダに保存
 function getConfigPath() {
   if (app.isPackaged) {
-    // パッケージ版: app.getAppPath()の親ディレクトリ（exeと同じフォルダ）
-    const appPath = app.getAppPath();
-    // app.asar の親ディレクトリ = resources の親 = exeのフォルダ
-    const exeDir = path.dirname(path.dirname(appPath));
+    // パッケージ版: resourcesの親ディレクトリ = exeと同じフォルダ
+    const exeDir = path.dirname(process.resourcesPath);
     console.log('パッケージ版検出');
-    console.log('appPath:', appPath);
+    console.log('resourcesPath:', process.resourcesPath);
     console.log('exeDir:', exeDir);
     return path.join(exeDir, 'config.json');
   } else {
