@@ -10,26 +10,9 @@ let mainWindow;
 const sessions = new Map();
 let sessionIdCounter = 0;
 
-// 設定ファイルをexeと同じフォルダに保存
-function getConfigPath() {
-  if (app.isPackaged) {
-    // パッケージ版: resourcesの親ディレクトリ = exeと同じフォルダ
-    const exeDir = path.dirname(process.resourcesPath);
-    console.log('パッケージ版検出');
-    console.log('resourcesPath:', process.resourcesPath);
-    console.log('exeDir:', exeDir);
-    return path.join(exeDir, 'config.json');
-  } else {
-    // 開発環境: AppData
-    console.log('開発環境検出');
-    return path.join(app.getPath('userData'), 'config.json');
-  }
-}
-
-const configPath = getConfigPath();
+// 設定ファイルはAppDataに保存
+const configPath = path.join(app.getPath('userData'), 'config.json');
 const skillsPath = path.join(__dirname, 'skills');
-
-console.log('設定ファイルパス:', configPath);
 
 function loadSkillFiles() {
   const skills = {};

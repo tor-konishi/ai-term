@@ -25,13 +25,6 @@ console.log('ポータブル版ZIPを作成中...');
 
 fs.copyFileSync(portableExe, path.join(tempDir, 'AI Terminal.exe'));
 
-// デフォルト設定ファイルをコピー
-const defaultConfig = path.join(__dirname, '..', 'config.default.json');
-if (fs.existsSync(defaultConfig)) {
-  fs.copyFileSync(defaultConfig, path.join(tempDir, 'config.json'));
-  console.log('デフォルト設定ファイルをコピーしました');
-}
-
 const readme = `AI Terminal - ポータブル版
 ========================================
 
@@ -46,11 +39,16 @@ const readme = `AI Terminal - ポータブル版
 
 3. 設定パネル（⚙️）からAPIキーを設定
 
-注意事項
---------
+設定ファイルの保存場所
+----------------------
 
-- 設定ファイル（config.json）は実行ファイルと同じフォルダに保存されます
-- フォルダごと移動しても設定が保持されます
+APIキーや設定は以下の場所に自動的に保存されます：
+
+  C:\\Users\\<ユーザー名>\\AppData\\Roaming\\ai-terminal\\config.json
+
+※ 実行ファイルと同じフォルダではなく、Windowsの標準的な
+   アプリケーションデータフォルダに保存されます。
+※ APIキーは平文で保存されます。ファイルの取り扱いにご注意ください。
 
 使い方
 ------
