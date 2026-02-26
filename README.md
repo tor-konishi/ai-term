@@ -24,7 +24,7 @@ ElectronベースのAI搭載ターミナルアプリケーション。ネット�
 
 ### エンドユーザー向け（ダウンロードして使う）
 
-**推奨**: [Releases](https://github.com/yourusername/ai-terminal/releases)から最新の`AI-Terminal-Portable.zip`をダウンロード
+**推奨**: [Releases](https://github.com/tor-konishi/ai-term/releases)から最新の`AI-Terminal-Portable.zip`をダウンロード
 
 1. ZIPを展開
 2. `AI Terminal.exe`を起動
