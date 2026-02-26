@@ -9,8 +9,27 @@ require('dotenv').config();
 let mainWindow;
 const sessions = new Map();
 let sessionIdCounter = 0;
-const configPath = path.join(app.getPath('userData'), 'config.json');
+
+// 設定ファイルをexeと同じフォルダに保存
+function getConfigPath() {
+  if (app.isPackaged) {
+    // パッケージ版: resourcesの親ディレクトリ = exeと同じフォルダ
+    const exeDir = path.dirname(process.resourcesPath);
+    console.log('パッケージ版検出');
+    console.log('resourcesPath:', process.resourcesPath);
+    console.log('exeDir:', exeDir);
+    return path.join(exeDir, 'config.json');
+  } else {
+    // 開発環境: AppData
+    console.log('開発環境検出');
+    return path.join(app.getPath('userData'), 'config.json');
+  }
+}
+
+const configPath = getConfigPath();
 const skillsPath = path.join(__dirname, 'skills');
+
+console.log('設定ファイルパス:', configPath);
 
 function loadSkillFiles() {
   const skills = {};
@@ -45,22 +64,51 @@ function loadConfig() {
   try {
     if (fs.existsSync(configPath)) {
       return JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    } else {
+      // 設定ファイルがない場合、デフォルトを作成
+      console.log('設定ファイルが見つからないため、デフォルトを作成します');
+      const defaultConfig = {
+        aiModel: 'gemini',
+        aiVersion: 'gemini-2.0-flash-exp',
+        apiKey: '',
+        terminalFontSize: 14,
+        chatFontSize: 13
+      };
+      saveConfig(defaultConfig);
+      return defaultConfig;
     }
   } catch (error) {
     console.error('設定読み込みエラー:', error);
+    return {
+      aiModel: 'gemini',
+      aiVersion: 'gemini-2.0-flash-exp',
+      apiKey: '',
+      terminalFontSize: 14,
+      chatFontSize: 13
+    };
   }
-  return {
-    aiModel: 'gemini',
-    aiVersion: 'gemini-2.0-flash-exp',
-    apiKey: process.env.GEMINI_API_KEY || '',
-    terminalFontSize: 14,
-    chatFontSize: 13
-  };
 }
 
 function saveConfig(config) {
   try {
-    fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+    const configDir = path.dirname(configPath);
+    
+    if (!fs.existsSync(configDir)) {
+      fs.mkdirSync(configDir, { recursive: true });
+    }
+    
+    let existingConfig = {};
+    if (fs.existsSync(configPath)) {
+      try {
+        existingConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      } catch (e) {
+        console.log('既存設定の読み込み失敗、新規作成します');
+      }
+    }
+    
+    const mergedConfig = { ...existingConfig, ...config };
+    fs.writeFileSync(configPath, JSON.stringify(mergedConfig, null, 2), 'utf8');
+    console.log('設定保存成功:', configPath);
     return true;
   } catch (error) {
     console.error('設定保存エラー:', error);
@@ -82,6 +130,11 @@ app.whenReady().then(() => {
   });
 
   mainWindow.loadFile('index.html');
+  
+  // 開発環境のみ開発者ツールを開く
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
 });
 
 ipcMain.on('window-minimize', () => {

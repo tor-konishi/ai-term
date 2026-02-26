@@ -25,9 +25,11 @@ console.log('ポータブル版ZIPを作成中...');
 
 fs.copyFileSync(portableExe, path.join(tempDir, 'AI Terminal.exe'));
 
-const envExample = path.join(__dirname, '..', '.env.example');
-if (fs.existsSync(envExample)) {
-  fs.copyFileSync(envExample, path.join(tempDir, '.env.example'));
+// デフォルト設定ファイルをコピー
+const defaultConfig = path.join(__dirname, '..', 'config.default.json');
+if (fs.existsSync(defaultConfig)) {
+  fs.copyFileSync(defaultConfig, path.join(tempDir, 'config.json'));
+  console.log('デフォルト設定ファイルをコピーしました');
 }
 
 const readme = `AI Terminal - ポータブル版
@@ -40,23 +42,15 @@ const readme = `AI Terminal - ポータブル版
 
 1. このフォルダを任意の場所に展開してください
 
-2. .env.example を .env にコピーして、APIキーを設定：
-   
-   .env.example → .env にリネーム
-   
-   中身を編集：
-   GEMINI_API_KEY=your_actual_key_here
+2. AI Terminal.exe をダブルクリックして起動
 
-3. AI Terminal.exe をダブルクリックして起動
-
-4. 初回起動時は設定パネル（⚙️）からもAPIキーを設定できます
+3. 設定パネル（⚙️）からAPIキーを設定
 
 注意事項
 --------
 
-- このポータブル版は、実行ファイルと同じフォルダの .env ファイルを読み込みます
-- 設定ファイル（config.json）は以下の場所に保存されます：
-  C:\\Users\\<ユーザー名>\\AppData\\Roaming\\ai-terminal\\config.json
+- 設定ファイル（config.json）は実行ファイルと同じフォルダに保存されます
+- フォルダごと移動しても設定が保持されます
 
 使い方
 ------

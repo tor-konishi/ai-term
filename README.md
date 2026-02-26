@@ -27,9 +27,8 @@ ElectronベースのAI搭載ターミナルアプリケーション。ネット�
 **推奨**: [Releases](https://github.com/yourusername/ai-terminal/releases)から最新の`AI-Terminal-Portable.zip`をダウンロード
 
 1. ZIPを展開
-2. `.env.example`を`.env`にリネーム
-3. `.env`を開いてAPIキーを設定
-4. `AI Terminal.exe`を起動
+2. `AI Terminal.exe`を起動
+3. 設定パネル（⚙️）からAPIキーを設定
 
 ### 開発者向け（ソースから実行）
 
@@ -46,21 +45,13 @@ cd ai-terminal
 npm install
 ```
 
-### 環境変数設定
-
-`.env.example`を`.env`にコピーして、AI APIキーを設定：
-
-```bash
-GEMINI_API_KEY=your_actual_key_here
-```
-
-または、アプリ起動後に設定パネル（⚙️）からAPIキーを設定できます。
-
 ## 起動
 
 ```bash
 npm start
 ```
+
+初回起動後、設定パネル（⚙️）からAPIキーを設定してください。
 
 ## Windows実行ファイル作成（開発者向け）
 
@@ -81,9 +72,9 @@ npm run build:win
 npm run build:portable
 ```
 
-- `dist/AI-Terminal-Portable.zip` - 実行ファイル + .env.example + README + skills
+- `dist/AI-Terminal-Portable.zip` - 実行ファイル + README + skills
 
-ZIPを展開して、`.env.example`を`.env`にリネームしてAPIキーを設定するだけで使用できます。
+ZIPを展開して、`AI Terminal.exe`を起動するだけで使用できます。
 
 ## 使い方
 
@@ -135,14 +126,12 @@ ZIPを展開して、`.env.example`を`.env`にリネームしてAPIキーを設
 
 ### 設定ファイルの保存場所
 
-APIキーや設定は**アプリのインストール場所とは別**の以下の場所に保存されます：
+APIキーや設定は**実行ファイルと同じフォルダ**に保存されます：
 
-- **Windows**: `C:\Users\<ユーザー名>\AppData\Roaming\ai-terminal\config.json`
-- **macOS**: `~/Library/Application Support/ai-terminal/config.json`
-- **Linux**: `~/.config/ai-terminal/config.json`
+- **ポータブル版**: `AI Terminal.exe`と同じフォルダの`config.json`
+- **開発環境**: `%APPDATA%\ai-terminal\config.json`
 
-※ APIキーは平文で保存されます。ファイルの取り扱いにご注意ください。  
-※ アプリをアンインストールしても、この設定ファイルは削除されません。
+※ APIキーは平文で保存されます。ファイルの取り扱いにご注意ください。
 
 ## 既知の問題
 

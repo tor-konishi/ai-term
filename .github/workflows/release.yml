@@ -38,15 +38,14 @@ jobs:
           ## ダウンロード
           
           ### 推奨: ポータブル版
-          - **AI-Terminal-Portable.zip** - すぐに使えるポータブル版（.env.example、skills含む）
+          - **AI-Terminal-Portable.zip** - すぐに使えるポータブル版（skills含む）
           
           ## セットアップ手順（ポータブル版）
           
           1. `AI-Terminal-Portable.zip` をダウンロード
           2. 任意の場所に展開
-          3. `.env.example` を `.env` にリネーム
-          4. `.env` を開いてAPIキーを設定
-          5. `AI Terminal.exe` を起動
+          3. `AI Terminal.exe` を起動
+          4. 設定パネル（⚙️）からAPIキーを設定
           
           詳細は同梱の `README_PORTABLE.txt` を参照してください。
         draft: false
