@@ -126,10 +126,11 @@ ZIPを展開して、`AI Terminal.exe`を起動するだけで使用できます
 
 ### 設定ファイルの保存場所
 
-APIキーや設定は**実行ファイルと同じフォルダ**に保存されます：
+APIキーや設定は以下の場所に自動的に保存されます：
 
-- **ポータブル版**: `AI Terminal.exe`と同じフォルダの`config.json`
-- **開発環境**: `%APPDATA%\ai-terminal\config.json`
+- **Windows**: `C:\Users\<ユーザー名>\AppData\Roaming\ai-terminal\config.json`
+- **macOS**: `~/Library/Application Support/ai-terminal/config.json`
+- **Linux**: `~/.config/ai-terminal/config.json`
 
 ※ APIキーは平文で保存されます。ファイルの取り扱いにご注意ください。
 
